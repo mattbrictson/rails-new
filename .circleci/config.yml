@@ -1,0 +1,77 @@
+version: 2.1
+
+executors:
+  ruby:
+    docker:
+      - image: circleci/ruby:2.6.5-node-browsers
+        environment:
+          PGHOST: 127.0.0.1
+          PGUSER: postgres
+          RAILS_ENV: test
+      - image: circleci/postgres
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: ""
+
+commands:
+  bundle_install:
+    steps:
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ arch }}-{{ checksum "Gemfile.lock" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-{{ arch }}-
+      - run: gem install bundler -v 2.1.2 --conservative --no-document
+      - run:
+          name: bundle install
+          command: |
+            bundle config set --local deployment true
+            bundle config set --local path vendor/bundle
+            bundle install --jobs=4 --retry=3
+      - run: bundle clean
+      - save_cache:
+          paths:
+            - ./vendor/bundle
+          key: v1-dependencies-{{ arch }}-{{ checksum "Gemfile.lock" }}
+  yarn_install:
+    steps:
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - v1-yarn-packages-{{ arch }}-{{ checksum "yarn.lock" }}
+            - v1-yarn-packages-{{ arch }}
+      - run:
+          name: Install Yarn Dependencies
+          command: yarn install --frozen-lockfile
+      - save_cache:
+          name: Save Yarn Package Cache
+          key: v1-yarn-packages-{{ arch }}-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
+
+jobs:
+  test:
+    executor: ruby
+    steps:
+      - checkout
+      - bundle_install
+      - yarn_install
+      - run: bundle exec rake db:setup
+      - run: bundle exec rake webdrivers:chromedriver:update
+      - run: bundle exec rake test test:system
+
+workflows:
+  version: 2
+  commit-workflow:
+    jobs:
+      - test
+  cron-workflow:
+    jobs:
+      - test
+    triggers:
+      - schedule:
+          cron: "0 13 * * 6"
+          filters:
+            branches:
+              only:
+                - master
