@@ -50,6 +50,9 @@ commands:
           key: v1-yarn-packages-{{ arch }}-{{ checksum "yarn.lock" }}
           paths:
             - ~/.cache/yarn
+  db_setup:
+    steps:
+      - run: bundle exec rake db:setup
 
 jobs:
   test:
@@ -58,7 +61,7 @@ jobs:
       - checkout
       - bundle_install
       - yarn_install
-      - run: bundle exec rake db:setup
+      - db_setup
       - run: bundle exec rake test
   test_system:
     executor: ruby
@@ -66,7 +69,7 @@ jobs:
       - checkout
       - bundle_install
       - yarn_install
-      - run: bundle exec rake db:setup
+      - db_setup
       - run: bundle exec rake webdrivers:chromedriver:update
       - run: bundle exec rake test:system
 
