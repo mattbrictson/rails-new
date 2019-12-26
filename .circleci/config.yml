@@ -4,14 +4,6 @@ executors:
   ruby:
     docker:
       - image: circleci/ruby:2.6.5-node-browsers
-        environment:
-          PGHOST: 127.0.0.1
-          PGUSER: postgres
-          RAILS_ENV: test
-      - image: circleci/postgres
-        environment:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: ""
 
 commands:
   bundle_install:
