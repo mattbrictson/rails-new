@@ -4,6 +4,8 @@ executors:
   ruby:
     docker:
       - image: circleci/ruby:2.6.5-node-browsers
+        environment:
+          RAILS_ENV: test
 
 commands:
   bundle_install:
