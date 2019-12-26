@@ -17,6 +17,7 @@ commands:
   bundle_install:
     steps:
       - restore_cache:
+          name: Restore Bundler Gem Cache
           keys:
             - v1-dependencies-{{ arch }}-{{ checksum "Gemfile.lock" }}
             # fallback to using the latest cache if no exact match is found
@@ -30,6 +31,7 @@ commands:
             bundle install --jobs=4 --retry=3
       - run: bundle clean
       - save_cache:
+          name: Save Bundler Gem Cache
           paths:
             - ./vendor/bundle
           key: v1-dependencies-{{ arch }}-{{ checksum "Gemfile.lock" }}
