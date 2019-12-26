@@ -57,17 +57,27 @@ jobs:
       - bundle_install
       - yarn_install
       - run: bundle exec rake db:setup
+      - run: bundle exec rake test
+  test_system:
+    executor: ruby
+    steps:
+      - checkout
+      - bundle_install
+      - yarn_install
+      - run: bundle exec rake db:setup
       - run: bundle exec rake webdrivers:chromedriver:update
-      - run: bundle exec rake test test:system
+      - run: bundle exec rake test:system
 
 workflows:
   version: 2
   commit-workflow:
     jobs:
       - test
+      - test_system
   cron-workflow:
     jobs:
       - test
+      - test_system
     triggers:
       - schedule:
           cron: "0 13 * * 6"
