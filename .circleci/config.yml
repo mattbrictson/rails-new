@@ -3,7 +3,7 @@ version: 2.1
 executors:
   ruby:
     docker:
-      - image: circleci/ruby:2.6.5-node-browsers
+      - image: circleci/ruby:2.6.6-node-browsers
         environment:
           RAILS_ENV: test
 
@@ -16,7 +16,7 @@ commands:
             - v1-dependencies-{{ arch }}-{{ checksum "Gemfile.lock" }}
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-{{ arch }}-
-      - run: gem install bundler -v 2.1.3 --conservative --no-document
+      - run: gem install bundler -v 2.1.4 --conservative --no-document
       - run:
           name: bundle install
           command: |
