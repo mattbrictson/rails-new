@@ -9,63 +9,86 @@ executors:
 
 commands:
   bundle_install:
+    description: Install Ruby dependencies with Bundler
     steps:
       - restore_cache:
-          name: Restore Bundler Gem Cache
           keys:
-            - v1-dependencies-{{ arch }}-{{ checksum "Gemfile.lock" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-{{ arch }}-
-      - run: gem install bundler -v 2.1.4 --conservative --no-document
+            - bundle-v1-{{ arch }}-{{ checksum "Gemfile.lock" }}
+            - bundle-v1-{{ arch }}-
       - run:
-          name: bundle install
+          name: Install Ruby Dependencies
           command: |
-            bundle config set --local deployment true
-            bundle config set --local path vendor/bundle
+            gem install bundler -v 2.1.4 --conservative --no-document
+            bundle config --local deployment true
+            bundle config --local path vendor/bundle
             bundle install --jobs=4 --retry=3
-      - run: bundle clean
+            bundle clean
       - save_cache:
-          name: Save Bundler Gem Cache
           paths:
             - ./vendor/bundle
-          key: v1-dependencies-{{ arch }}-{{ checksum "Gemfile.lock" }}
+          key: bundle-v1-{{ arch }}-{{ checksum "Gemfile.lock" }}
+  install_node:
+    description: Install latest versions of Node and Yarn
+    steps:
+      - run:
+          name: Install Node
+          command: |
+            curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash
+            sudo apt-get install -y nodejs
+            sudo ln -sf /usr/bin/node /usr/local/bin/node
+      - run:
+          name: Install Yarn
+          command: |
+            sudo npm i -g yarn
+            sudo ln -sf /usr/bin/yarn /usr/local/bin/yarn
+  set_up_database:
+    steps:
+      - run:
+          name: Set Up Database
+          command: bundle exec rake db:setup
   yarn_install:
+    description: Install JS dependencies with Yarn
     steps:
       - restore_cache:
-          name: Restore Yarn Package Cache
           keys:
-            - v1-yarn-packages-{{ arch }}-{{ checksum "yarn.lock" }}
-            - v1-yarn-packages-{{ arch }}
+            - yarn-cache-v1-{{ arch }}-{{ checksum "yarn.lock" }}
+            - yarn-cache-v1-{{ arch }}
       - run:
-          name: Install Yarn Dependencies
-          command: yarn install --frozen-lockfile
+          name: Install JS Dependencies
+          command: yarn install --frozen-lockfile --cache-folder .yarn-cache
       - save_cache:
-          name: Save Yarn Package Cache
-          key: v1-yarn-packages-{{ arch }}-{{ checksum "yarn.lock" }}
           paths:
-            - ~/.cache/yarn
-  db_setup:
-    steps:
-      - run: bundle exec rake db:setup
+            - .yarn-cache
+          key: yarn-cache-v1-{{ arch }}-{{ checksum "yarn.lock" }}
 
 jobs:
   test:
     executor: ruby
     steps:
+      - install_node
       - checkout
       - bundle_install
       - yarn_install
-      - db_setup
-      - run: bundle exec rake test
+      - set_up_database
+      - run:
+          name: Run Tests
+          command: bundle exec rake test
   test_system:
     executor: ruby
     steps:
+      - install_node
       - checkout
       - bundle_install
       - yarn_install
-      - db_setup
-      - run: bundle exec rake webdrivers:chromedriver:update
-      - run: bundle exec rake test:system
+      - set_up_database
+      - run:
+          name: Run System Tests
+          command: |
+            bundle exec rake webdrivers:chromedriver:update
+            bundle exec rake test:system
+      - store_artifacts:
+          path: ./tmp/screenshots
+          destination: screenshots
 
 workflows:
   version: 2
