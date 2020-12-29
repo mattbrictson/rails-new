@@ -144,6 +144,7 @@ GEM
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     regexp_parser (1.8.2)
+    rexml (3.2.4)
     rubyzip (2.3.0)
     sass-rails (6.0.0)
       sassc-rails (~> 2.1, >= 2.1.1)
@@ -210,6 +211,7 @@ DEPENDENCIES
   listen (>= 3.0.5, < 3.4)
   puma (~> 5.1)
   rails (~> 6.1.0)
+  rexml
   sass-rails (~> 6)
   selenium-webdriver
   spring
@@ -222,4 +224,4 @@ DEPENDENCIES
   webpacker (~> 5.2)
 
 BUNDLED WITH
-   2.1.4
+   2.2.3
