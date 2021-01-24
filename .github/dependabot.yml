@@ -5,22 +5,31 @@ updates:
     schedule:
       interval: weekly
       day: saturday
-      time: "08:00"
+      time: "05:00"
       timezone: America/Los_Angeles
     open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "automerge"
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
       interval: weekly
       day: saturday
-      time: "08:00"
+      time: "05:00"
       timezone: America/Los_Angeles
     open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "automerge"
   - package-ecosystem: npm
     directory: "/"
     schedule:
       interval: weekly
       day: saturday
-      time: "08:00"
+      time: "05:00"
       timezone: America/Los_Angeles
     open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "automerge"
