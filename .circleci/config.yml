@@ -13,8 +13,8 @@ commands:
     steps:
       - restore_cache:
           keys:
-            - bundle-v1-{{ arch }}-{{ checksum "Gemfile.lock" }}
-            - bundle-v1-{{ arch }}-
+            - bundle-v2-{{ arch }}-{{ checksum "Gemfile.lock" }}
+            - bundle-v2-{{ arch }}-
       - run:
           name: Install Ruby Dependencies
           command: |
@@ -26,7 +26,7 @@ commands:
       - save_cache:
           paths:
             - ./vendor/bundle
-          key: bundle-v1-{{ arch }}-{{ checksum "Gemfile.lock" }}
+          key: bundle-v2-{{ arch }}-{{ checksum "Gemfile.lock" }}
   install_node:
     description: Install latest versions of Node and Yarn
     steps:
