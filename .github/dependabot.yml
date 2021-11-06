@@ -10,7 +10,6 @@ updates:
     open-pull-requests-limit: 10
     labels:
       - "dependencies"
-      - "automerge"
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
@@ -21,7 +20,6 @@ updates:
     open-pull-requests-limit: 10
     labels:
       - "dependencies"
-      - "automerge"
   - package-ecosystem: npm
     directory: "/"
     schedule:
@@ -32,4 +30,3 @@ updates:
     open-pull-requests-limit: 10
     labels:
       - "dependencies"
-      - "automerge"
