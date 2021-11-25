@@ -17,6 +17,7 @@ commands:
     steps:
       - node/install:
           lts: true
+          install-npm: false
           install-yarn: true
   set_up_database:
     steps:
