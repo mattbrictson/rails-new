@@ -42,8 +42,9 @@ jobs:
       - install_node
       - checkout
       - ruby/install-deps
-      - node/install-packages:
-          pkg-manager: yarn
+      # Not needed currently in Node-less Rails 7 setup
+      # - node/install-packages:
+      #     pkg-manager: yarn
       - set_up_database
       - run:
           name: Run System Tests
