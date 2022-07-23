@@ -41,7 +41,8 @@ jobs:
       - browser-tools/install-chrome
       - install_node
       - checkout
-      - ruby/install-deps
+      - ruby/install-deps:
+          key: gems-2022
       # Not needed currently in Node-less Rails 7 setup
       # - node/install-packages:
       #     pkg-manager: yarn
@@ -61,14 +62,3 @@ workflows:
     jobs:
       - test
       - test_system
-  cron-workflow:
-    jobs:
-      - test
-      - test_system
-    triggers:
-      - schedule:
-          cron: "0 13 * * 6"
-          filters:
-            branches:
-              only:
-                - main
