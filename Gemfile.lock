@@ -84,6 +84,9 @@ GEM
     concurrent-ruby (1.1.10)
     connection_pool (2.3.0)
     crass (1.0.6)
+    debug (1.7.0)
+      irb (>= 1.5.0)
+      reline (>= 0.3.1)
     digest (3.1.0)
     erubi (1.11.0)
     globalid (1.0.0)
@@ -93,6 +96,9 @@ GEM
     importmap-rails (1.1.5)
       actionpack (>= 6.0.0)
       railties (>= 6.0.0)
+    io-console (0.5.11)
+    irb (1.5.1)
+      reline (>= 0.3.0)
     jbuilder (2.11.5)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
@@ -169,6 +175,8 @@ GEM
     redis-client (0.9.0)
       connection_pool
     regexp_parser (2.6.0)
+    reline (0.3.1)
+      io-console (~> 0.5)
     rexml (3.2.5)
     rubyzip (2.3.2)
     selenium-webdriver (4.7.1)
@@ -224,6 +232,7 @@ PLATFORMS
 DEPENDENCIES
   bootsnap
   capybara
+  debug
   importmap-rails
   jbuilder
   puma (~> 5.6)
