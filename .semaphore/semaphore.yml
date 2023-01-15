@@ -1,0 +1,39 @@
+version: v1.0
+name: CI
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu2004
+global_job_config:
+  env_vars:
+    - name: BUNDLE_CLEAN
+      value: "true"
+    - name: BUNDLE_DEPLOYMENT
+      value: "true"
+    - name: BUNDLE_PATH
+      value: "./vendor/bundle"
+    - name: RAILS_ENV
+      value: "test"
+  prologue:
+    commands:
+      - checkout
+      - sem-version ruby $(cat .ruby-version)
+      - cache restore
+      - bundle check || bundle install
+      - cache store
+      - bundle exec rake db:setup
+blocks:
+  - name: Test
+    dependencies: []
+    task:
+      jobs:
+        - name: Test
+          commands:
+            - bundle exec rake test
+  - name: System Test
+    dependencies: []
+    task:
+      jobs:
+        - name: System Test
+          commands:
+            - bundle exec rake test:system
