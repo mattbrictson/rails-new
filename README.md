@@ -1,6 +1,6 @@
 # README
 
-[![CircleCI](https://circleci.com/gh/mattbrictson/rails-new.svg?style=shield)](https://circleci.com/gh/mattbrictson/rails-new)
+[![Build Status](https://mattbrictson.semaphoreci.com/badges/rails-new/branches/main.svg?style=shields)](https://mattbrictson.semaphoreci.com/projects/rails-new)
 
 This README would normally document whatever steps are necessary to get the
 application up and running.
