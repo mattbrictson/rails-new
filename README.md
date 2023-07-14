@@ -1,6 +1,6 @@
 # README
 
-[![Build Status](https://mattbrictson.semaphoreci.com/badges/rails-new/branches/main.svg?style=shields)](https://mattbrictson.semaphoreci.com/projects/rails-new)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/mattbrictson/rails-new/ci.yml)](https://github.com/mattbrictson/rails-new/actions/workflows/ci.yml)
 
 This README would normally document whatever steps are necessary to get the
 application up and running.
